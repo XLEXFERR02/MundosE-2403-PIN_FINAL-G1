@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-CLUSTER_NAME=mundoes-cluster-G6
+CLUSTER_NAME=mundosE-EKS-cluster-G1
 AWS_REGION=us-east-2
 
 # Set AWS credentials 
@@ -18,10 +18,11 @@ then
   --node-type t2.small \
   --with-oidc \
   --ssh-access \
-  --ssh-public-key jenkins \
+  #--ssh-public-key jenkins \
   --managed \
   --full-ecr-access \
-  --zones us-east-2a,us-east-2b,us-east-2c
+  #--zones us-east-2a,us-east-2b,us-east-2c
+  --zones us-east-2a
 
   if [ $? -eq 0 ]
   then
