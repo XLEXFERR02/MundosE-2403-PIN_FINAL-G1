@@ -87,10 +87,14 @@ spec:
   selector:
     app: nginx
   ports:
-    - protocol: TCP
+    - name: service
+      nodePort: 30464 
+      protocol: TCP
       port: 80
       targetPort: 80
-    - protocol: TCP
+    - name: service2 
+      nodePort: 30465 
+      protocol: TCP
       port: 9113
       targetPort: 9113
 EOF
