@@ -10,6 +10,9 @@ if [ $? -eq 0 ]
 then
   echo "Credenciales testeadas, proceder con la creacion de cluster."
 
+  # ✅ **Habilitar OIDC antes de la creación del clúster**
+  eksctl utils associate-iam-oidc-provider --region=$AWS_REGION --cluster=$CLUSTER_NAME --approve
+
   # Creación de cluster
   eksctl create cluster \
     --name $CLUSTER_NAME \
@@ -27,20 +30,12 @@ then
     # ✅ **Esperar unos segundos para estabilidad**
     sleep 30
 
-    # ✅ **Habilitar OIDC después de la creación del clúster**
-    eksctl utils associate-iam-oidc-provider --region=$AWS_REGION --cluster=$CLUSTER_NAME --approve
-
-    # ✅ **Esperar unos segundos para que OIDC se propague correctamente**
-    sleep 20
-
     # ✅ **Actualizar todos los addons para evitar problemas de compatibilidad**
     eksctl update addon --name vpc-cni --cluster $CLUSTER_NAME --region $AWS_REGION --force
     eksctl update addon --name metrics-server --cluster $CLUSTER_NAME --region $AWS_REGION --force
     eksctl update addon --name kube-proxy --cluster $CLUSTER_NAME --region $AWS_REGION --force
     eksctl update addon --name coredns --cluster $CLUSTER_NAME --region $AWS_REGION --force
 
-    # ✅ **Verificar el estado final del clúster**
-    eksctl get cluster --name $CLUSTER_NAME --region $AWS_REGION --verbose 4
   else
     echo "❌ Cluster Setup Falló mientras se ejecuto eksctl."
   fi
